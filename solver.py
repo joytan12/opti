@@ -7,7 +7,7 @@ def solver(data):
     # Crear las variables
     pF = [LpVariable("pF{}".format(i), lowBound=0, cat="Integer") for i in range(data['Meses'])]
     pE = [LpVariable("pE{}".format(i), lowBound=0, cat="Integer") for i in range(data['Meses'])]
-    m = [LpVariable("m{}".format(i), lowBound=0, cat="Binary") for i in range(data['Meses'])]
+    # m = [LpVariable("m{}".format(i), lowBound=0, cat="Binary") for i in range(data['Meses'])]
 
     almacen = [LpVariable("almacen{}".format(i), lowBound=0, cat="Integer") for i in range(data['Meses'])]
 
@@ -50,7 +50,10 @@ def solver(data):
         prob += data['TopeProduccion'] >= pF[i]
     
     for i in range(data['Meses']):
-        prob += ((data['TopeProduccion'] // 2) + 1) * m[i]  >= pE[i]
+        prob += ((data['TopeProduccion'] // 2) + 1)  >= pE[i]
+    
+    for i in range(data['Meses']):
+        prob += 0 <= pE[i]
 
     archivo = "instancia.txt"
 
@@ -83,7 +86,6 @@ def solver(data):
         print("Valor óptimo de pF = ", pF[i].value(), end=" ")
         print("Valor óptimo de pE = ", pE[i].value(), end=" ")
         print("Valor óptimo de almacen = ", almacen[i].value(), end=" ")
-        print("Valor óptimo de m = ", m[i].value(), end=" ")
         print(i)
 
     resultado = prob.objective.value()
