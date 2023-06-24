@@ -50,16 +50,14 @@ def solver(data):
     # Restricciones de procuccion extra
 
     for i in range(data['Meses']):
-        prob += binA + binB == 1
-
-    for i in range(data['Meses']):
-        prob += pE[i] >= pF[i] * 0.5 - binB * 1000
+        prob += binA[i] + binB[i] == 1
     
     for i in range(data['Meses']):
-        prob += ((data['TopeProduccion'] // 2) + 1) - binB * 1000  >= pE[i]
+        prob += pE[i] >= pF[i] * 0.5 - (1 - binB[i]) * 100000
+        prob += pE[i] <= ((data['TopeProduccion'] // 2) + 1) + (1 - binB[i]) * 100000
     
     for i in range(data['Meses']):
-        prob += 0 - (1 - binA) * 1000 >= pE[i]
+        prob += pE[i] <= 0 + (1 - binA[i]) * 100000
 
     archivo = "instancia.txt"
 
@@ -91,7 +89,9 @@ def solver(data):
     for i in range(data['Meses']):
         print("Valor óptimo de pF = ", pF[i].value(), end=" ")
         print("Valor óptimo de pE = ", pE[i].value(), end=" ")
-        print("Valor óptimo de almacen = ", almacen[i].value(), end=" ")
+        print("Valor óptimo de almacen = ", almacen[i].value(), end="    ")
+        print("bin1 = ", binA[i].value(), end=" ")
+        print("bin2 = ", binB[i].value(), end="    ")
         print(i)
 
     resultado = prob.objective.value()
