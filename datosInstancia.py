@@ -38,7 +38,7 @@ def simulacion():
         promedioC = (sum(x['Costos']) // x['Meses'])
         x['ValorChip'] = (promedioC + b) * 2
         x['CosteAlmacen'] = b
-        x['Almacen'] = promedioD * 5 // 9
-        x['TopeProduccion'] = (promedioD) * 11 // 14
+        x['Almacen'] = promedioD
+        x['TopeProduccion'] = (promedioD) * 14 // 9
     
     return simulaciones
